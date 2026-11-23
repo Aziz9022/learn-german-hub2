@@ -6,9 +6,16 @@ import {defineConfig} from 'vite';
 import {VitePWA} from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
+  const rawBase = process.env.VITE_BASE_PATH?.trim();
+  const base = rawBase
+    ? rawBase.endsWith('/')
+      ? rawBase
+      : `${rawBase}/`
+    : './';
+
   return {
-    // Supports both root deployment and GitHub Pages subpaths
-    base: process.env.VITE_BASE_PATH || './',
+    // Supports root deployment, relative builds, and GitHub Pages subpaths via VITE_BASE_PATH
+    base,
     plugins: [
       react({
         refreshExclude: /.*/,
@@ -52,7 +59,7 @@ export default defineConfig(() => {
           globIgnores: ['**/assets/aistudio/**'],
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
           navigateFallback: 'index.html',
-          navigateFallbackDenylist: [/^\/api\//, /^\/assets\//],
+          navigateFallbackDenylist: [/\/api\//, /\/assets\//],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

@@ -2,8 +2,15 @@ import DOMPurify from 'dompurify';
 import JSZip from 'jszip';
 import type { ImportedBookAsset, StoredBookPackage } from '../types/grammar';
 
-export const APPENDIX_PDF_URL =
-  './assets/aistudio/German_Grammar_in_a_Nutshell__D_-_kurz_und_schmeralos___Christine_e31092ac.pdf';
+function resolvePublicAsset(relativePath: string): string {
+  const base = import.meta.env.BASE_URL || './';
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  return `${normalizedBase}${relativePath.replace(/^\/+/, '')}`;
+}
+
+export const APPENDIX_PDF_URL = resolvePublicAsset(
+  'assets/aistudio/German_Grammar_in_a_Nutshell__D_-_kurz_und_schmeralos___Christine_e31092ac.pdf'
+);
 
 export interface ParsedBookPage {
   anchorId: string;
@@ -326,10 +333,13 @@ export function parseBookHtmlDocument(
  * if available (tries both relative and root paths and guards against SPA fallback HTML).
  */
 export async function loadPreloadedBookPackage(): Promise<StoredBookPackage | null> {
-  const candidateUrls = [
-    './assets/aistudio/index_c68e1c20.html',
-    '/assets/aistudio/index_c68e1c20.html',
-  ];
+  const candidateUrls = Array.from(
+    new Set([
+      resolvePublicAsset('assets/aistudio/index_c68e1c20.html'),
+      './assets/aistudio/index_c68e1c20.html',
+      '/assets/aistudio/index_c68e1c20.html',
+    ])
+  );
 
   let htmlText = '';
   for (const url of candidateUrls) {
@@ -350,14 +360,24 @@ export async function loadPreloadedBookPackage(): Promise<StoredBookPackage | nu
   if (!htmlText) return null;
 
   let cssText = '';
-  try {
-    const cssResp = await fetch('./assets/aistudio/style_f6c433ea.css');
-    if (cssResp.ok) {
-      const t = await cssResp.text();
-      if (!t.includes('<div id="root"></div>')) cssText = t;
+  for (const cssUrl of Array.from(
+    new Set([
+      resolvePublicAsset('assets/aistudio/style_f6c433ea.css'),
+      './assets/aistudio/style_f6c433ea.css',
+    ])
+  )) {
+    try {
+      const cssResp = await fetch(cssUrl);
+      if (cssResp.ok) {
+        const t = await cssResp.text();
+        if (!t.includes('<div id="root"></div>')) {
+          cssText = t;
+          break;
+        }
+      }
+    } catch {
+      // Optional CSS
     }
-  } catch {
-    // Optional CSS
   }
 
   return {
