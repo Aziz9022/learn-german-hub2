@@ -1,0 +1,98 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reader textbook prose styles for imported/preloaded Calibre HTML */
+.textbook-prose {
+  font-family: var(--font-sans);
+  color: inherit;
+  word-wrap: break-word;
+}
+
+.textbook-prose h1,
+.textbook-prose h2,
+.textbook-prose h3,
+.textbook-prose h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.textbook-prose p {
+  margin-bottom: 0.75rem;
+}
+
+.textbook-prose .tb-german-clickable {
+  cursor: pointer;
+  border-bottom: 1px dashed rgba(30, 58, 95, 0.45);
+  transition: background-color 150ms ease, border-color 150ms ease;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.dark .textbook-prose .tb-german-clickable {
+  border-bottom-color: rgba(147, 197, 253, 0.45);
+}
+
+.textbook-prose .tb-german-clickable:hover {
+  background-color: rgba(217, 119, 6, 0.14);
+  border-bottom-color: rgba(217, 119, 6, 0.85);
+}
+
+.textbook-prose .tb-search-hit {
+  background-color: #fde68a;
+  color: #17202a;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.textbook-prose .tb-highlight {
+  background-color: rgba(250, 204, 21, 0.35);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.dark .textbook-prose .tb-highlight {
+  background-color: rgba(234, 179, 8, 0.28);
+}
+
+/* Subtle horizontal scrollbar for grammar tables */
+.grammar-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.grammar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.grammar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 9999px;
+}

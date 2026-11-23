@@ -1,0 +1,6 @@
+{
+  "name": "German Grammar in a Nutshell — Interactive Learning Platform",
+  "description": "An independent, interactive German grammar learning platform, textbook reader, grammar laboratory, sentence analyzer, and pronunciation studio built around Langenscheidt's German Grammar in a Nutshell.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
